@@ -1,31 +1,32 @@
 <div class="full-screen container d-flex flex-column justify-content-center align-content-center">
 
   <h2 class="text-center">Create Event</h2>
-
-  <mat-form-field>
-    <mat-label>Event:</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-
-  <mat-form-field>
-    <mat-label>Description:</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field>
+  <form [formGroup]="form" class="d-flex flex-column justify-content-center align-content-center">
+    <mat-form-field>
+      <mat-label>Event:</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
 
 
-  <mat-form-field>
-    <mat-label>Choose the date</mat-label>
-    <input matInput [matDatepicker]="picker">
-    <mat-hint>MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description:</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
 
-  <div class="d-flex justify-content-end">
-    <button mat-raised-button class="mx-4">Submit</button>
-    <button mat-raised-button routerLink="/management">Cancel</button>
-  </div>
+
+    <mat-form-field>
+      <mat-label>Choose the date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="d-flex justify-content-end">
+      <button mat-raised-button class="mx-4" (click)="createEvent()">Submit</button>
+      <button mat-raised-button routerLink="/management">Cancel</button>
+    </div>
+  </form>
 </div>
 
 
