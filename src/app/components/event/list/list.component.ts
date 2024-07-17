@@ -9,10 +9,14 @@ import {
   MatHeaderRowDef,
   MatRow,
   MatRowDef,
-  MatTable
+  MatTable,
+  MatTableDataSource
 } from "@angular/material/table";
 import {EventService} from "../event.service";
 import {EventResponse} from "../model/event.model";
+import {MatIcon} from "@angular/material/icon";
+import {RouterLink} from "@angular/router";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-list',
@@ -27,7 +31,10 @@ import {EventResponse} from "../model/event.model";
     MatHeaderRowDef,
     MatRowDef,
     MatHeaderRow,
-    MatRow
+    MatRow,
+    MatIcon,
+    RouterLink,
+    MatButton
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
@@ -35,17 +42,22 @@ import {EventResponse} from "../model/event.model";
 export class ListComponent implements OnInit {
 
   eventService = inject(EventService);
-  events: EventResponse[] | undefined = [];
+  events: EventResponse[] = [];
   loading: boolean = false;
-  displayedColumns: string[] = ['name', 'description', 'date'];
-  dataSource: EventResponse[] = [];
+  displayedColumns: string[] = ['name', 'description', 'date', 'update / delete'];
+  dataSource = new MatTableDataSource(this.events);
 
   constructor() {
     this.listenGetAllEvents();
+    this.listenDeleteEvent();
   }
 
   ngOnInit(): void {
     this.getAllEvents();
+  }
+
+  deleteEvent(publicId: string): void {
+    this.eventService.delete(publicId);
   }
 
   private getAllEvents() {
@@ -59,7 +71,20 @@ export class ListComponent implements OnInit {
       if (allEvents.status == 'OK' && allEvents.value) {
         this.loading = false;
         this.events = allEvents.value;
-        this.dataSource = allEvents.value
+        this.dataSource.data = allEvents.value
+      }
+    });
+  }
+
+  private listenDeleteEvent() {
+    effect(() => {
+      const deleteStatus = this.eventService.deleteSignal();
+      const deleteId = this.eventService.deleteIdSignal();
+      if (deleteStatus.value?.statusText == 'OK') {
+        const eventIndexToDelete =
+          this.events?.findIndex(event => event.publicId === deleteId.value);
+        this.events?.splice(eventIndexToDelete!, 1);
+        this.dataSource.data = this.events;
       }
     });
   }

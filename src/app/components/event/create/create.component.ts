@@ -4,6 +4,7 @@ import {MatInput} from "@angular/material/input";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatButton} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-create',
@@ -17,7 +18,8 @@ import {MatButton} from "@angular/material/button";
     MatHint,
     MatLabel,
     MatNativeDateModule,
-    MatButton
+    MatButton,
+    RouterLink
   ],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

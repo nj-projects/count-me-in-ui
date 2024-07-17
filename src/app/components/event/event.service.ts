@@ -1,5 +1,5 @@
 import {computed, inject, Injectable, signal, WritableSignal} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {State} from "../../core/model/state.model";
 import {EventRequest, EventResponse} from "./model/event.model";
 import {environment} from "../../../environments/environment.development";
@@ -20,6 +20,15 @@ export class EventService {
   private list$: WritableSignal<State<EventResponse[]>> = signal(State.Builder<EventResponse[]>().forInit());
   listSignal = computed(() => this.list$());
 
+  private event$: WritableSignal<State<EventResponse>> = signal(State.Builder<EventResponse>().forInit());
+  eventSignal = computed(() => this.event$());
+
+  private delete$: WritableSignal<State<HttpResponse<any>>> = signal(State.Builder<HttpResponse<any>>().forInit());
+  deleteSignal = computed(() => this.delete$());
+
+  private deleteId$: WritableSignal<State<string>> = signal(State.Builder<string>().forInit());
+  deleteIdSignal = computed(() => this.deleteId$());
+
   create(eventRequest: EventRequest) {
     this.http.post<EventResponse>(`${environment.API_URL}/event`, eventRequest)
       .subscribe({
@@ -35,4 +44,36 @@ export class EventService {
         error: err => this.list$.set(State.Builder<EventResponse[]>().forError(err))
       })
   }
+
+  get(publicId: string) {
+    this.http.get<EventResponse>(`${environment.API_URL}/event/${publicId}`)
+      .subscribe({
+        next: event => this.event$.set(State.Builder<EventResponse>().forSuccess(event)),
+        error: err => this.event$.set(State.Builder<EventResponse>().forError(err))
+      })
+  }
+
+  update(publicId: string, event: EventRequest) {
+    this.http.put<EventResponse>(`${environment.API_URL}/event/${publicId}`, event)
+      .subscribe({
+        next: event => this.event$.set(State.Builder<EventResponse>().forSuccess(event)),
+        error: err => this.event$.set(State.Builder<EventResponse>().forError(err))
+      })
+  }
+
+  delete(publicId: string) {
+    this.http.delete<HttpResponse<any>>(`${environment.API_URL}/event/${publicId}`, {
+      observe: 'response'
+    })
+      .subscribe({
+          next: result => {
+            this.delete$.set(State.Builder<HttpResponse<any>>().forSuccess(result))
+            this.deleteId$.set(State.Builder<string>().forSuccess(publicId))
+          },
+          error: err => this.delete$.set(State.Builder<HttpResponse<any>>().forError(err))
+        }
+      )
+  }
 }
+
+
