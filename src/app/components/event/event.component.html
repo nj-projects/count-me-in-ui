@@ -1,19 +1,24 @@
 <!-- HERO -->
 @if (events.length > 0) {
-  <section id="hero" class="min-vh-100 d-flex align-items-center text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h1 data-aos="fade-left"
-              class="text-uppercase text-white fw-semibold display-1 text-super">{{ events[0].name }}</h1>
-          <h3 class="text-white mt-3 mb-4 py-4" data-aos="fade-right">{{ events[0].description }}</h3>
-          <div data-aos="fade-up" data-aos-delay="50">
-            <app-date-container [customDate]="customDate"/>
+
+  <ngb-carousel class="min-vh-100" [interval]="10000">
+    @for (event of events; track event.publicId) {
+      <ng-template ngbSlide>
+        @if (event.publicId === '0') {
+        } @else {
+          <div>
+            <img [src]="images[0]" alt="Random first slide" class="img-fluid"/>
           </div>
+        }
+
+        <div class="carousel-caption">
+          <app-date-container [eventDate]="event.date"/>
+          <h3>{{ event.name }}</h3>
+          <p>{{ event.description }}</p>
         </div>
-      </div>
-    </div>
-  </section>
+      </ng-template>
+    }
+  </ngb-carousel>
 } @else {
   <section id="no-event" class="min-vh-100 d-flex align-items-center text-center">
     <div class="container">
