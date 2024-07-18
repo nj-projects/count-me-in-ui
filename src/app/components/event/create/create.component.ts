@@ -66,7 +66,13 @@ export class CreateComponent implements OnDestroy {
     this.event.name = this.form.value.name!;
     this.event.description = this.form.value.description!;
     this.event.date = moment(this.form.value.date!).format('DD-MM-yyyy').toString();
-    this.event.imageUrl = this.form.value.imageUrl!;
+    let url = new URL(this.form.value.imageUrl!);
+    console.log(url.protocol);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      this.event.imageUrl = this.form.value.imageUrl!;
+    } else {
+      this.event.imageUrl = '';
+    }
 
     this.eventService.create(this.event);
   }

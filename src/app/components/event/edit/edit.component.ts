@@ -73,7 +73,15 @@ export class EditComponent implements OnInit, OnDestroy {
     this.updatedEvent.name = this.form.value.name!;
     this.updatedEvent.description = this.form.value.description!;
     this.updatedEvent.date = moment(this.form.value.date!).format('DD-MM-yyyy');
-    this.updatedEvent.imageUrl = this.form.value.imageUrl!;
+    try {
+      let url = new URL(this.form.value.imageUrl!);
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        this.updatedEvent.imageUrl = this.form.value.imageUrl!;
+      }
+    } catch (err) {
+      this.updatedEvent.imageUrl = '';
+    }
+
     this.eventService.update(this.publicId!, this.updatedEvent);
   }
 
@@ -88,6 +96,7 @@ export class EditComponent implements OnInit, OnDestroy {
           name: event.value.name,
           description: event.value.description,
           date: event.value.date,
+          imageUrl: event.value.imageUrl
         })
       }
     });
