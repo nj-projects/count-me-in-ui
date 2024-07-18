@@ -6,6 +6,8 @@ import {count} from "rxjs";
 import {DateCardComponent} from "../date-container/date-card/date-card.component";
 import {DateContainerComponent} from "../date-container/date-container.component";
 import {CustomDate} from "../date-container/model/date.model";
+import {MatButton} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-event',
@@ -13,7 +15,9 @@ import {CustomDate} from "../date-container/model/date.model";
   imports: [
     DatePipe,
     DateCardComponent,
-    DateContainerComponent
+    DateContainerComponent,
+    MatButton,
+    RouterLink
   ],
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
@@ -25,22 +29,6 @@ export class EventComponent implements OnInit {
   loading: boolean = false;
   countdown: string = "";
   customDate = {} as CustomDate;
-
-  // todo: refactor
-  updateTime = setInterval(() => {
-    const now = new Date().getTime();
-    const toDate = Date.parse(this.event!.date) - now;
-    let days = Math.floor(toDate / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((toDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let mins = Math.floor((toDate % (1000 * 60 * 60)) / (1000 * 60));
-    let secs = Math.floor((toDate % (1000 * 60)) / (1000));
-
-    this.countdown = days + "d " + hours + "h " + mins + "m " + secs + "s ";
-    this.customDate.days = days;
-    this.customDate.hours = hours;
-    this.customDate.mins = mins;
-    this.customDate.secs = secs;
-  })
 
   constructor() {
     this.listenGetAllEvents();
@@ -62,9 +50,23 @@ export class EventComponent implements OnInit {
         this.loading = false;
         this.events = allEvents.value;
         this.event = allEvents.value[0];
+        this.setCountdown();
       }
     });
   }
 
   protected readonly count = count;
+
+  private setCountdown() {
+    if (this.events.length > 0) {
+      setInterval(() => {
+        const now = new Date().getTime();
+        const toDate = Date.parse(this.event!.date) - now;
+        this.customDate.days = Math.floor(toDate / (1000 * 60 * 60 * 24));
+        this.customDate.hours = Math.floor((toDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        this.customDate.mins = Math.floor((toDate % (1000 * 60 * 60)) / (1000 * 60));
+        this.customDate.secs = Math.floor((toDate % (1000 * 60)) / (1000));
+      })
+    }
+  }
 }

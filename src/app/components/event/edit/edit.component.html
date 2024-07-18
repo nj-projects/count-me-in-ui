@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <div class="d-flex justify-content-end">
-      <button mat-raised-button class="mx-4" (click)="updateEvent()">Submit</button>
+      <button mat-raised-button class="mx-4" (click)="updateEvent()" [disabled]="!form.valid">Submit</button>
       <button mat-raised-button routerLink="/management">Cancel</button>
     </div>
   </form>
