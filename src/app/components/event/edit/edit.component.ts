@@ -13,7 +13,6 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {EventService} from "../event.service";
 import {EventRequest, EventResponse} from "../model/event.model";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CustomDate} from "../../date-container/model/date.model";
 import moment from "moment";
 
 @Component({
@@ -69,7 +68,7 @@ export class EditComponent implements OnInit {
     this.updatedEvent.description = this.form.value.description!;
     this.updatedEvent.date = moment(this.form.value.date!).format('DD-MM-yyyy');
     this.eventService.update(this.publicId!, this.updatedEvent);
-    this.router.navigate(['']);
+    this.router.navigate(['management']);
   }
 
   private listenToGetEvent() {

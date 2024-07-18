@@ -1,4 +1,4 @@
-import {Component, effect, inject} from '@angular/core';
+import {Component, effect, inject, OnDestroy} from '@angular/core';
 import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {
@@ -37,7 +37,7 @@ import {EventRequest} from "../model/event.model";
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
-export class CreateComponent {
+export class CreateComponent implements OnDestroy {
 
   eventService = inject(EventService);
   route = inject(ActivatedRoute);
@@ -56,14 +56,15 @@ export class CreateComponent {
     this.listenCreateEvent();
   }
 
+  ngOnDestroy(): void {
+    this.eventService.resetCreate();
+  }
+
 
   createEvent() {
     this.event.name = this.form.value.name!;
     this.event.description = this.form.value.description!;
     this.event.date = moment(this.form.value.date!).format('DD-MM-yyyy').toString();
-
-    console.log(this.event.date);
-    console.log(this.event.name);
 
     this.eventService.create(this.event);
   }
@@ -72,8 +73,14 @@ export class CreateComponent {
     effect(() => {
       const newEvent = this.eventService.createSignal();
       if (newEvent.status === 'OK' && newEvent.value) {
+        this.resetEvent();
         this.router.navigate(['/management'])
       }
     })
+  }
+
+  private resetEvent() {
+    this.event = {} as EventRequest;
+    this.form.reset();
   }
 }

@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -39,7 +39,7 @@ import {MatButton} from "@angular/material/button";
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
 
   eventService = inject(EventService);
   events: EventResponse[] = [];
@@ -54,6 +54,10 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllEvents();
+  }
+
+  ngOnDestroy(): void {
+    this.eventService.resetDelete();
   }
 
   deleteEvent(publicId: string): void {

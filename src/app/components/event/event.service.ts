@@ -74,6 +74,16 @@ export class EventService {
         }
       )
   }
+
+  resetCreate() {
+    this.create$.set(State.Builder<EventResponse>().forInit());
+  }
+
+  resetDelete() {
+    this.delete$.set(State.Builder<HttpResponse<any>>().forInit());
+    this.deleteId$.set(State.Builder<string>().forInit());
+  }
+
 }
 
 
