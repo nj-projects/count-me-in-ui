@@ -23,6 +23,9 @@ export class EventService {
   private event$: WritableSignal<State<EventResponse>> = signal(State.Builder<EventResponse>().forInit());
   eventSignal = computed(() => this.event$());
 
+  private updatedEvent$: WritableSignal<State<EventResponse>> = signal(State.Builder<EventResponse>().forInit());
+  updatedEventSignal = computed(() => this.updatedEvent$());
+
   private delete$: WritableSignal<State<HttpResponse<any>>> = signal(State.Builder<HttpResponse<any>>().forInit());
   deleteSignal = computed(() => this.delete$());
 
@@ -56,8 +59,8 @@ export class EventService {
   update(publicId: string, event: EventRequest) {
     this.http.put<EventResponse>(`${environment.API_URL}/event/${publicId}`, event)
       .subscribe({
-        next: event => this.event$.set(State.Builder<EventResponse>().forSuccess(event)),
-        error: err => this.event$.set(State.Builder<EventResponse>().forError(err))
+        next: event => this.updatedEvent$.set(State.Builder<EventResponse>().forSuccess(event)),
+        error: err => this.updatedEvent$.set(State.Builder<EventResponse>().forError(err))
       })
   }
 
@@ -83,6 +86,11 @@ export class EventService {
     this.delete$.set(State.Builder<HttpResponse<any>>().forInit());
     this.deleteId$.set(State.Builder<string>().forInit());
   }
+
+  resetUpdate() {
+    this.updatedEvent$.set(State.Builder<EventResponse>().forInit());
+  }
+
 
 }
 

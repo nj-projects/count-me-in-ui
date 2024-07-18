@@ -17,6 +17,7 @@ import {EventResponse} from "../model/event.model";
 import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
+import {YesNoPipe} from "../../../pipes/yes-no.pipe";
 
 @Component({
   selector: 'app-list',
@@ -34,7 +35,8 @@ import {MatButton} from "@angular/material/button";
     MatRow,
     MatIcon,
     RouterLink,
-    MatButton
+    MatButton,
+    YesNoPipe
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
@@ -44,7 +46,7 @@ export class ListComponent implements OnInit, OnDestroy {
   eventService = inject(EventService);
   events: EventResponse[] = [];
   loading: boolean = false;
-  displayedColumns: string[] = ['name', 'description', 'date', 'update / delete'];
+  displayedColumns: string[] = ['name', 'description', 'date', 'imageUrl', 'update / delete'];
   dataSource = new MatTableDataSource(this.events);
 
   constructor() {
