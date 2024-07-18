@@ -14,6 +14,7 @@ import {EventService} from "../event.service";
 import {EventRequest, EventResponse} from "../model/event.model";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import moment from "moment";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-edit',
@@ -42,6 +43,8 @@ export class EditComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
   fb = inject(FormBuilder);
+  snackBar = inject(MatSnackBar);
+
 
   event: EventResponse | undefined = undefined;
   updatedEvent = {} as EventRequest;
@@ -106,6 +109,9 @@ export class EditComponent implements OnInit, OnDestroy {
     effect(() => {
       const updatedEvent = this.eventService.updatedEventSignal();
       if (updatedEvent.status === 'OK' && updatedEvent.value) {
+        this.snackBar.open("Event updated", 'Success', {
+          duration: 5000,
+        });
         this.router.navigate(['management']);
       }
     });
