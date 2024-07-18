@@ -50,6 +50,7 @@ export class CreateComponent implements OnDestroy {
     name: ['', Validators.required],
     description: ['', Validators.required],
     date: ['', Validators.required],
+    imageUrl: ['']
   })
 
   constructor() {
@@ -65,6 +66,7 @@ export class CreateComponent implements OnDestroy {
     this.event.name = this.form.value.name!;
     this.event.description = this.form.value.description!;
     this.event.date = moment(this.form.value.date!).format('DD-MM-yyyy').toString();
+    this.event.imageUrl = this.form.value.imageUrl!;
 
     this.eventService.create(this.event);
   }

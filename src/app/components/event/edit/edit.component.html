@@ -19,6 +19,12 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-label>Image URL:</mat-label>
+      <input matInput formControlName="imageUrl"/>
+      <mat-hint>Paste an image url or leave blank to the default image selected</mat-hint>
+    </mat-form-field>
+
     <div class="d-flex justify-content-end">
       <button mat-raised-button class="mx-4" (click)="updateEvent()" [disabled]="!form.valid">Submit</button>
       <button mat-raised-button routerLink="/management">Cancel</button>

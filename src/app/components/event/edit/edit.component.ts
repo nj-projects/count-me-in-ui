@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MatDatepicker,
@@ -37,7 +37,7 @@ import moment from "moment";
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   eventService = inject(EventService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -52,10 +52,12 @@ export class EditComponent implements OnInit {
     name: ['', Validators.required],
     description: ['', Validators.required],
     date: ['', Validators.required],
+    imageUrl: ['']
   })
 
   constructor() {
     this.listenToGetEvent();
+    this.listenToUpdateEvent();
   }
 
   ngOnInit(): void {
@@ -63,12 +65,16 @@ export class EditComponent implements OnInit {
     this.getEvent();
   }
 
+  ngOnDestroy(): void {
+    this.eventService.resetUpdate();
+  }
+
   updateEvent() {
     this.updatedEvent.name = this.form.value.name!;
     this.updatedEvent.description = this.form.value.description!;
     this.updatedEvent.date = moment(this.form.value.date!).format('DD-MM-yyyy');
+    this.updatedEvent.imageUrl = this.form.value.imageUrl!;
     this.eventService.update(this.publicId!, this.updatedEvent);
-    this.router.navigate(['management']);
   }
 
   private listenToGetEvent() {
@@ -83,6 +89,15 @@ export class EditComponent implements OnInit {
           description: event.value.description,
           date: event.value.date,
         })
+      }
+    });
+  }
+
+  private listenToUpdateEvent() {
+    effect(() => {
+      const updatedEvent = this.eventService.updatedEventSignal();
+      if (updatedEvent.status === 'OK' && updatedEvent.value) {
+        this.router.navigate(['management']);
       }
     });
   }
