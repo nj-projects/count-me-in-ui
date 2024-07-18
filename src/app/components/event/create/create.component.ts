@@ -14,6 +14,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {EventService} from "../event.service";
 import moment from "moment/moment";
 import {EventRequest} from "../model/event.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-create',
@@ -43,6 +44,7 @@ export class CreateComponent implements OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
   fb = inject(FormBuilder);
+  snackBar = inject(MatSnackBar);
 
   event = {} as EventRequest;
 
@@ -66,9 +68,18 @@ export class CreateComponent implements OnDestroy {
     this.event.name = this.form.value.name!;
     this.event.description = this.form.value.description!;
     this.event.date = moment(this.form.value.date!).format('DD-MM-yyyy').toString();
-    this.event.imageUrl = this.form.value.imageUrl!;
+
+    try {
+      let url = new URL(this.form.value.imageUrl!);
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        this.event.imageUrl = this.form.value.imageUrl!;
+      }
+    } catch (err) {
+      this.event.imageUrl = '';
+    }
 
     this.eventService.create(this.event);
+
   }
 
   private listenCreateEvent() {
@@ -76,6 +87,9 @@ export class CreateComponent implements OnDestroy {
       const newEvent = this.eventService.createSignal();
       if (newEvent.status === 'OK' && newEvent.value) {
         this.resetEvent();
+        this.snackBar.open("Event created", 'Success', {
+          duration: 5000,
+        });
         this.router.navigate(['/management'])
       }
     })

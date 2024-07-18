@@ -14,6 +14,7 @@ import {EventService} from "../event.service";
 import {EventRequest, EventResponse} from "../model/event.model";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import moment from "moment";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-edit',
@@ -42,6 +43,8 @@ export class EditComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
   fb = inject(FormBuilder);
+  snackBar = inject(MatSnackBar);
+
 
   event: EventResponse | undefined = undefined;
   updatedEvent = {} as EventRequest;
@@ -73,7 +76,15 @@ export class EditComponent implements OnInit, OnDestroy {
     this.updatedEvent.name = this.form.value.name!;
     this.updatedEvent.description = this.form.value.description!;
     this.updatedEvent.date = moment(this.form.value.date!).format('DD-MM-yyyy');
-    this.updatedEvent.imageUrl = this.form.value.imageUrl!;
+    try {
+      let url = new URL(this.form.value.imageUrl!);
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        this.updatedEvent.imageUrl = this.form.value.imageUrl!;
+      }
+    } catch (err) {
+      this.updatedEvent.imageUrl = '';
+    }
+
     this.eventService.update(this.publicId!, this.updatedEvent);
   }
 
@@ -88,6 +99,7 @@ export class EditComponent implements OnInit, OnDestroy {
           name: event.value.name,
           description: event.value.description,
           date: event.value.date,
+          imageUrl: event.value.imageUrl
         })
       }
     });
@@ -97,6 +109,9 @@ export class EditComponent implements OnInit, OnDestroy {
     effect(() => {
       const updatedEvent = this.eventService.updatedEventSignal();
       if (updatedEvent.status === 'OK' && updatedEvent.value) {
+        this.snackBar.open("Event updated", 'Success', {
+          duration: 5000,
+        });
         this.router.navigate(['management']);
       }
     });

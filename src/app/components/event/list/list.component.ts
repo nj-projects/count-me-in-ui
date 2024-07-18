@@ -18,6 +18,7 @@ import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
 import {YesNoPipe} from "../../../pipes/yes-no.pipe";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-list',
@@ -44,6 +45,8 @@ import {YesNoPipe} from "../../../pipes/yes-no.pipe";
 export class ListComponent implements OnInit, OnDestroy {
 
   eventService = inject(EventService);
+  snackBar = inject(MatSnackBar);
+
   events: EventResponse[] = [];
   loading: boolean = false;
   displayedColumns: string[] = ['name', 'description', 'date', 'imageUrl', 'update / delete'];
@@ -91,6 +94,9 @@ export class ListComponent implements OnInit, OnDestroy {
           this.events?.findIndex(event => event.publicId === deleteId.value);
         this.events?.splice(eventIndexToDelete!, 1);
         this.dataSource.data = this.events;
+        this.snackBar.open("Event Deleted", 'Success', {
+          duration: 5000,
+        });
       }
     });
   }
