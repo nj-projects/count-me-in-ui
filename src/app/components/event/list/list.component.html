@@ -1,4 +1,10 @@
-@if (dataSource.data.length > 0) {
+@if (loading) {
+  <div class="flex flex-column justify-content-center align-items-center h-10rem">
+    <h1 class="text-center">Loading Events...</h1>
+  </div>
+}
+
+@if (dataSource.data.length > 0 && !loading) {
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- Name Column -->
