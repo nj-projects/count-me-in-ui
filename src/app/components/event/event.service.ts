@@ -2,7 +2,7 @@ import {computed, inject, Injectable, signal, WritableSignal} from '@angular/cor
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {State} from "../../core/model/state.model";
 import {EventRequest, EventResponse} from "./model/event.model";
-import {environment} from "../../../environments/environment.development";
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
