@@ -73,6 +73,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   updateEvent() {
+    this.loading = true;
     this.updatedEvent.name = this.form.value.name!;
     this.updatedEvent.description = this.form.value.description!;
     this.updatedEvent.date = moment(this.form.value.date!).format('DD-MM-yyyy');
@@ -109,6 +110,7 @@ export class EditComponent implements OnInit, OnDestroy {
     effect(() => {
       const updatedEvent = this.eventService.updatedEventSignal();
       if (updatedEvent.status === 'OK' && updatedEvent.value) {
+        this.loading = false;
         this.snackBar.open("Event updated", 'Success', {
           duration: 5000,
         });

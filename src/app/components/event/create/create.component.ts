@@ -15,6 +15,7 @@ import {EventService} from "../event.service";
 import moment from "moment/moment";
 import {EventRequest} from "../model/event.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-create',
@@ -32,7 +33,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatNativeDateModule,
     MatButton,
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner
   ],
   providers: [MatDatepickerModule],
   templateUrl: './create.component.html',
@@ -45,6 +47,7 @@ export class CreateComponent implements OnDestroy {
   router = inject(Router);
   fb = inject(FormBuilder);
   snackBar = inject(MatSnackBar);
+  loading: boolean = false;
 
   event = {} as EventRequest;
 
@@ -65,6 +68,7 @@ export class CreateComponent implements OnDestroy {
 
 
   createEvent() {
+    this.loading = true;
     this.event.name = this.form.value.name!;
     this.event.description = this.form.value.description!;
     this.event.date = moment(this.form.value.date!).format('DD-MM-yyyy').toString();
@@ -86,6 +90,7 @@ export class CreateComponent implements OnDestroy {
     effect(() => {
       const newEvent = this.eventService.createSignal();
       if (newEvent.status === 'OK' && newEvent.value) {
+        this.loading = false;
         this.resetEvent();
         this.snackBar.open("Event created", 'Success', {
           duration: 5000,

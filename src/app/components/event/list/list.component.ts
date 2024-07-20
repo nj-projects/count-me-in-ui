@@ -66,6 +66,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   deleteEvent(publicId: string): void {
+    this.loading = true;
     this.eventService.delete(publicId);
   }
 
@@ -90,6 +91,7 @@ export class ListComponent implements OnInit, OnDestroy {
       const deleteStatus = this.eventService.deleteSignal();
       const deleteId = this.eventService.deleteIdSignal();
       if (deleteStatus.value?.statusText == 'OK') {
+        this.loading = false;
         const eventIndexToDelete =
           this.events?.findIndex(event => event.publicId === deleteId.value);
         this.events?.splice(eventIndexToDelete!, 1);
