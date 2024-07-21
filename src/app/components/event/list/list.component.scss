@@ -7,3 +7,14 @@
 mat-icon {
   cursor: pointer;
 }
+
+@media only screen and (max-width: 900px) {
+  .mat-table {
+    display: flex;
+  }
+
+  .mat-mdc-row, {
+    font-size: .6rem;
+
+  }
+}
