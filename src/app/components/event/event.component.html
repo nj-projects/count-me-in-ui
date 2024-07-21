@@ -1,39 +1,55 @@
 <!-- HERO -->
-@if (events.length > 0) {
-  <ngb-carousel class="min-vh-100" [interval]="10000">
-
-    @for (event of events; track event.publicId) {
-      <ng-template ngbSlide>
-        @if (event.imageUrl !== '') {
-          <img src="{{event.imageUrl}}" alt="Event image" class="img-fluid">
-        } @else {
-          <div>
-            <img [src]="defaultImage" alt="Random first slide" class="img-fluid"/>
-          </div>
-        }
-
-        <div class="carousel-caption">
-          <div class="date-container">
-            <app-date-container [eventDate]="event.date"/>
-          </div>
-
-          <h3 class="event-name">{{ event.name }}</h3>
-          <p class="event-description">{{ event.description }}</p>
-        </div>
-      </ng-template>
-    }
-  </ngb-carousel>
-} @else {
-  <section id="no-event" class="min-vh-100 d-flex align-items-center text-center">
+@if (serverOffline) {
+  <section id="offline" class="min-vh-100 d-flex align-items-center text-center">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <h1 data-aos="fade-left"
-              class="text-uppercase text-white fw-semibold display-1 text-super">No Events Added</h1>
-          <button mat-raised-button routerLink="/create">Add Event</button>
+              class="text-uppercase text-white fw-semibold display-1 text-super">Demo Application</h1>
+          <h3 class="text-white">Initial Requests can be delayed by 50 seconds or more as the server starts.</h3>
+          <p class="text-white">Thank you for your patience</p>
         </div>
       </div>
     </div>
   </section>
+} @else {
+  @if (events.length > 0) {
+    <ngb-carousel class="min-vh-100" [interval]="10000">
+
+      @for (event of events; track event.publicId) {
+        <ng-template ngbSlide>
+          @if (event.imageUrl !== '') {
+            <img src="{{event.imageUrl}}" alt="Event image" class="img-fluid">
+          } @else {
+            <div>
+              <img [src]="defaultImage" alt="Random first slide" class="img-fluid"/>
+            </div>
+          }
+
+          <div class="carousel-caption">
+            <div class="date-container">
+              <app-date-container [eventDate]="event.date"/>
+            </div>
+
+            <h3 class="event-name">{{ event.name }}</h3>
+            <p class="event-description">{{ event.description }}</p>
+          </div>
+        </ng-template>
+      }
+    </ngb-carousel>
+  } @else {
+    <section id="no-event" class="min-vh-100 d-flex align-items-center text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 data-aos="fade-left"
+                class="text-uppercase text-white fw-semibold display-1 text-super">No Events Added</h1>
+            <button mat-raised-button routerLink="/create">Add Event</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
 }
 
