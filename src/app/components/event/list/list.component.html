@@ -2,54 +2,56 @@
   <div class="flex flex-column justify-content-center align-items-center h-10rem">
     <h1 class="text-center">Loading Events...</h1>
   </div>
-}
-
-@if (dataSource.data.length > 0 && !loading) {
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name</th>
-      <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
-    </ng-container>
-
-    <!-- Description Column -->
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef> Description</th>
-      <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
-    </ng-container>
-
-    <!-- Date Column -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Date</th>
-      <td mat-cell *matCellDef="let element"> {{ element.date }}</td>
-    </ng-container>
-
-    <!-- Custom Image Column -->
-    <ng-container matColumnDef="imageUrl">
-      <th mat-header-cell *matHeaderCellDef> Custom Image?</th>
-      <td mat-cell *matCellDef="let element"> {{ element.imageUrl !== '' | yesNo }}</td>
-    </ng-container>
-
-    <!-- Update / Delete Column -->
-    <ng-container matColumnDef="update / delete">
-      <th mat-header-cell *matHeaderCellDef> Update / Delete</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-icon aria-hidden="false" aria-label="edit icon" fontIcon="mode" color="primary"
-                  routerLink="edit/{{element.publicId}}"></mat-icon>
-        <span class="icon-separator px-2">|</span>
-        <mat-icon aria-hidden="false" aria-label="delete icon" fontIcon="delete" color="warn"
-                  (click)="deleteEvent(element.publicId)"></mat-icon>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
 } @else {
-  <div class="flex flex-column justify-content-center align-items-center h-10rem">
-    <h1 class="text-center">No Events present</h1>
-    <div class="text-xl text-center">It seems that you haven't added any events yet</div>
-  </div>
+  @if (dataSource.data.length > 0) {
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name</th>
+        <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description</th>
+        <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date</th>
+        <td mat-cell *matCellDef="let element"> {{ element.date }}</td>
+      </ng-container>
+
+      <!-- Custom Image Column -->
+      <ng-container matColumnDef="imageUrl">
+        <th mat-header-cell *matHeaderCellDef> Custom Image?</th>
+        <td mat-cell *matCellDef="let element"> {{ element.imageUrl !== '' | yesNo }}</td>
+      </ng-container>
+
+      <!-- Update / Delete Column -->
+      <ng-container matColumnDef="update / delete">
+        <th mat-header-cell *matHeaderCellDef> Update / Delete</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon aria-hidden="false" aria-label="edit icon" fontIcon="mode" color="primary"
+                    routerLink="edit/{{element.publicId}}"></mat-icon>
+          <span class="icon-separator px-2">|</span>
+          <mat-icon aria-hidden="false" aria-label="delete icon" fontIcon="delete" color="warn"
+                    (click)="deleteEvent(element.publicId)"></mat-icon>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  } @else {
+    <div class="flex flex-column justify-content-center align-items-center h-10rem">
+      <h1 class="text-center">No Events present</h1>
+      <div class="text-xl text-center">It seems that you haven't added any events yet</div>
+    </div>
+  }
 }
+
+
 
