@@ -43,3 +43,9 @@ img {
   z-index: 100;
 }
 
+@media only screen and (max-width: 600px) {
+  .text-super {
+    font-size: 4rem;
+  }
+}
+

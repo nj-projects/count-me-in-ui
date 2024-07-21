@@ -3,6 +3,7 @@ import {HttpClient, HttpResponse} from "@angular/common/http";
 import {State} from "../../core/model/state.model";
 import {EventRequest, EventResponse} from "./model/event.model";
 import {environment} from "../../../environments/environment";
+import {retry} from "rxjs";
 
 
 @Injectable({
@@ -42,6 +43,12 @@ export class EventService {
 
   list() {
     this.http.get<EventResponse[]>(`${environment.API_URL}/event`)
+      .pipe(
+        retry({
+          count: 5,
+          delay: 20000
+        })
+      )
       .subscribe({
         next: events => this.list$.set(State.Builder<EventResponse[]>().forSuccess(events)),
         error: err => this.list$.set(State.Builder<EventResponse[]>().forError(err))
