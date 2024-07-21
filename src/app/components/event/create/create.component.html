@@ -28,7 +28,7 @@
     </mat-form-field>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-primary mx-2 rounded-5" type="button" [disabled]="!form.valid" (click)="createEvent()">
+      <button class="btn btn-primary mx-2 rounded-5" type="button" [disabled]="!form.valid || loading" (click)="createEvent()">
         @if (loading) {
           <span class="spinner-border spinner-border-sm mx-2" aria-hidden="true"></span>
         }
