@@ -6,7 +6,8 @@ import {DateCardComponent} from "../date-container/date-card/date-card.component
 import {DateContainerComponent} from "../date-container/date-container.component";
 import {MatButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
-import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCarouselModule, NgbToast} from "@ng-bootstrap/ng-bootstrap";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-event',
@@ -17,21 +18,24 @@ import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
     DateContainerComponent,
     MatButton,
     RouterLink,
-    NgbCarouselModule
+    NgbCarouselModule,
+    NgbToast
   ],
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
 })
 export class EventComponent implements OnInit {
   eventService = inject(EventService);
+  snackBar = inject(MatSnackBar);
+
   events: EventResponse[] = [];
   event: EventResponse | undefined = undefined;
   loading: boolean = false;
-  // todo - add image url to api
   defaultImage = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=3764&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   constructor() {
     this.listenGetAllEvents();
+    this.snackBar.open("This is a demo application. Initial requests can be delayed by 50 seconds or more.", 'Close');
   }
 
   ngOnInit(): void {
